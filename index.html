@@ -1,22 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Charlotte Historic Graveyard AR</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
+
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
     <script defer src="app.js"></script>
 </head>
 
 <body>
+    <div id="loading-screen">
+        <h1>Charlotte Historic Graveyard AR</h1>
+        <p>Loading the AR experience...</p>
+    </div>
 
-    <h1>Charlotte Historic Graveyard AR</h1>
+    <a-scene
+        mindar-image="imageTargetSrc: ./assets/targets/test-target.mind;"
+        embedded
+        color-space="sRGB"
+        renderer="colorManagement: true, physicallyCorrectLights"
+        vr-mode-ui="enabled: false"
+        device-orientation-permission-ui="enabled: false"
+    >
+        <a-assets></a-assets>
 
-    <p>
-        Welcome! This webpage will become our browser-based augmented reality experience.
-    </p>
+        <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
+        <a-entity mindar-image-target="targetIndex: 0">
+            <a-plane
+                color="#006241"
+                opacity="0.85"
+                position="0 0 0"
+                height="0.35"
+                width="1"
+            ></a-plane>
+
+            <a-text
+                value="Historic Graveyard"
+                color="#ffffff"
+                align="center"
+                position="0 0 0.02"
+                width="1.5"
+            ></a-text>
+        </a-entity>
+    </a-scene>
 </body>
 </html>
