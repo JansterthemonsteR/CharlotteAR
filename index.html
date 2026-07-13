@@ -2,53 +2,122 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    />
 
     <title>Charlotte Historic Graveyard AR</title>
 
     <link rel="stylesheet" href="style.css" />
 
+    <!-- A-Frame creates the 3D scene. -->
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+
+    <!-- MindAR handles image recognition and tracking. -->
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
     <script defer src="app.js"></script>
 </head>
 
 <body>
+
+    <!-- Temporary loading screen shown while the camera starts. -->
     <div id="loading-screen">
         <h1>Charlotte Historic Graveyard AR</h1>
-        <p>Loading the AR experience...</p>
+        <p>Starting camera...</p>
     </div>
 
+    <!-- Normal webpage panel shown when the hotspot is clicked. -->
+    <div id="info-panel" class="hidden">
+        <div class="info-card">
+            <button id="close-panel" aria-label="Close information panel">
+                ×
+            </button>
+
+            <h2>Historic Graveyard</h2>
+
+            <p>
+                This is temporary information for our first test hotspot.
+                Later, this panel will contain the real historical content.
+            </p>
+        </div>
+    </div>
+
+    <!-- The augmented-reality scene. -->
     <a-scene
-        mindar-image="imageTargetSrc: ./assets/targets/test-target.mind;"
+        mindar-image="
+            imageTargetSrc: ./assets/targets/test-target.mind;
+            autoStart: true;
+        "
         embedded
         color-space="sRGB"
-        renderer="colorManagement: true; physicallyCorrectLights: true; alpha: true"
+        renderer="
+            colorManagement: true;
+            physicallyCorrectLights: true;
+            alpha: true;
+        "
         vr-mode-ui="enabled: false"
         device-orientation-permission-ui="enabled: false"
     >
+
         <a-assets></a-assets>
 
-        <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+        <!--
+            The cursor and raycaster allow mouse clicks and touchscreen taps
+            to interact with objects marked with the class 'clickable'.
+        -->
+       <a-camera
+    position="0 0 0"
+    look-controls="enabled: false"
+></a-camera>
 
-        <a-entity mindar-image-target="targetIndex: 0">
-            <a-plane
-                color="#006241"
-                opacity="0.85"
-                position="0 0 0"
-                height="0.35"
-                width="1"
-            ></a-plane>
+<a-entity
+    cursor="rayOrigin: mouse; fuse: false"
+    raycaster="objects: .clickable; far: 10000"
+></a-entity>
 
+        <!-- Everything inside this entity attaches to the tracked image. -->
+        <a-entity
+            id="image-target"
+            mindar-image-target="targetIndex: 0"
+        >
+
+            <!-- Our first clickable hotspot. -->
+            <a-circle
+                id="hotspot-one"
+                class="clickable"
+                radius="0.18"
+                position="0 0 0.03"
+                material="
+                    color: #006241;
+                    opacity: 0.95;
+                    transparent: true;
+                "
+                animation="
+                    property: scale;
+                    from: 1 1 1;
+                    to: 1.15 1.15 1.15;
+                    direction: alternate;
+                    loop: true;
+                    dur: 700;
+                    easing: easeInOutSine;
+                "
+            ></a-circle>
+
+            <!-- The letter shown inside the hotspot. -->
             <a-text
-                value="Historic Graveyard"
+                value="i"
                 color="#ffffff"
                 align="center"
-                position="0 0 0.02"
-                width="1.5"
+                position="0 0 0.04"
+                width="0.7"
             ></a-text>
+
         </a-entity>
+
     </a-scene>
+
 </body>
 </html>
