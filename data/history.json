@@ -1,0 +1,19 @@
+{
+  "hotspots": [
+    {
+      "id": "history",
+      "title": "History of the Site",
+      "description": "This temporary section introduces the history of the graveyard and explains why the site is important to Charlotte."
+    },
+    {
+      "id": "people",
+      "title": "People Remembered",
+      "description": "This section will share information about people connected to the graveyard and the surrounding community."
+    },
+    {
+      "id": "preservation",
+      "title": "Preserving the Graveyard",
+      "description": "This section will explain preservation efforts and how visitors can learn more about the historic site."
+    }
+  ]
+}
