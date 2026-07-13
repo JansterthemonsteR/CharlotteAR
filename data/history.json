@@ -3,17 +3,29 @@
     {
       "id": "history",
       "title": "History of the Site",
-      "description": "This temporary section introduces the history of the graveyard and explains why the site is important to Charlotte."
+      "description": "This temporary section introduces the history of the graveyard and explains why the site is important to Charlotte.",
+      "image": "./assets/targets/test-card.png",
+      "imageAlt": "Temporary image for the history section",
+      "link": "https://www.charlottenc.gov/",
+      "linkText": "Learn More"
     },
     {
       "id": "people",
       "title": "People Remembered",
-      "description": "This section will share information about people connected to the graveyard and the surrounding community."
+      "description": "This section will share information about people connected to the graveyard and the surrounding community.",
+      "image": "./assets/targets/test-card.png",
+      "imageAlt": "Temporary image for the people remembered section",
+      "link": "",
+      "linkText": ""
     },
     {
       "id": "preservation",
       "title": "Preserving the Graveyard",
-      "description": "This section will explain preservation efforts and how visitors can learn more about the historic site."
+      "description": "This section will explain preservation efforts and how visitors can learn more about the historic site.",
+      "image": "./assets/targets/test-card.png",
+      "imageAlt": "Temporary image for the preservation section",
+      "link": "https://www.charlottenc.gov/",
+      "linkText": "Visit Charlotte's Website"
     }
   ]
 }

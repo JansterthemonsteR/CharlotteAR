@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const infoPanel = document.querySelector("#info-panel");
     const panelTitle = document.querySelector("#panel-title");
     const panelDescription = document.querySelector("#panel-description");
+    const panelImage = document.querySelector("#panel-image");
+    const panelLink = document.querySelector("#panel-link");
     const closeButton = document.querySelector("#close-panel");
 
     let hotspotData = [];
@@ -17,7 +19,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     /*
-     * Load the historical information from history.json.
+     * Load the historical content from the JSON file.
      */
     try {
         const response = await fetch("./data/history.json");
@@ -48,7 +50,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     /*
-     * Display an error if the camera cannot start.
+     * Show an error message if the camera cannot start.
      */
     scene.addEventListener("arError", () => {
         console.error("MindAR could not start.");
@@ -62,7 +64,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     /*
-     * Open the matching information when a hotspot is selected.
+     * Open the matching information panel when a hotspot is clicked.
      */
     hotspots.forEach((hotspot) => {
         hotspot.addEventListener("click", () => {
@@ -87,6 +89,36 @@ document.addEventListener("DOMContentLoaded", async () => {
             panelTitle.textContent = selectedHotspot.title;
             panelDescription.textContent = selectedHotspot.description;
 
+            /*
+             * Display the image only when one is provided.
+             */
+            if (panelImage && selectedHotspot.image) {
+                panelImage.src = selectedHotspot.image;
+                panelImage.alt =
+                    selectedHotspot.imageAlt || selectedHotspot.title;
+
+                panelImage.classList.remove("hidden");
+            } else if (panelImage) {
+                panelImage.src = "";
+                panelImage.alt = "";
+                panelImage.classList.add("hidden");
+            }
+
+            /*
+             * Display the Learn More button only when a link is provided.
+             */
+            if (panelLink && selectedHotspot.link) {
+                panelLink.href = selectedHotspot.link;
+                panelLink.textContent =
+                    selectedHotspot.linkText || "Learn More";
+
+                panelLink.classList.remove("hidden");
+            } else if (panelLink) {
+                panelLink.href = "#";
+                panelLink.textContent = "";
+                panelLink.classList.add("hidden");
+            }
+
             infoPanel.classList.remove("hidden");
 
             console.log(`Opened hotspot: ${selectedHotspot.title}`);
@@ -94,7 +126,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     /*
-     * Close the information panel.
+     * Close the reusable information panel.
      */
     function closeInfoPanel() {
         if (infoPanel) {
@@ -107,7 +139,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     /*
-     * Clicking the dark background also closes the card.
+     * Clicking the dark area outside the card also closes it.
      */
     if (infoPanel) {
         infoPanel.addEventListener("click", (event) => {
