@@ -2,9 +2,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const scene = document.querySelector("a-scene");
     const loadingScreen = document.querySelector("#loading-screen");
 
-    const hotspot = document.querySelector("#hotspot-one");
+    const hotspots = document.querySelectorAll(".hotspot");
 
     const infoPanel = document.querySelector("#info-panel");
+    const panelTitle = document.querySelector("#panel-title");
+    const panelDescription = document.querySelector("#panel-description");
     const closeButton = document.querySelector("#close-panel");
 
     if (!scene) {
@@ -31,26 +33,38 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    if (hotspot && infoPanel) {
-    hotspot.addEventListener("click", () => {
-        console.log("Hotspot opened.");
+    hotspots.forEach((hotspot) => {
+        hotspot.addEventListener("click", () => {
+            const title = hotspot.dataset.title;
+            const description = hotspot.dataset.description;
 
-        hotspot.setAttribute("material", "color", "#d97706");
-        infoPanel.classList.remove("hidden");
-    });
-}
+            if (!infoPanel || !panelTitle || !panelDescription) {
+                return;
+            }
 
-    if (closeButton && infoPanel) {
-        closeButton.addEventListener("click", () => {
-            console.log("Information panel closed.");
-            infoPanel.classList.add("hidden");
+            panelTitle.textContent = title;
+            panelDescription.textContent = description;
+
+            infoPanel.classList.remove("hidden");
+
+            console.log(`Opened hotspot: ${title}`);
         });
+    });
+
+    function closeInfoPanel() {
+        if (infoPanel) {
+            infoPanel.classList.add("hidden");
+        }
+    }
+
+    if (closeButton) {
+        closeButton.addEventListener("click", closeInfoPanel);
     }
 
     if (infoPanel) {
         infoPanel.addEventListener("click", (event) => {
             if (event.target === infoPanel) {
-                infoPanel.classList.add("hidden");
+                closeInfoPanel();
             }
         });
     }

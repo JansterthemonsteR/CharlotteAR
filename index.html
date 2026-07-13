@@ -23,25 +23,32 @@
 
 <body>
 
-    <!-- Temporary loading screen shown while the camera starts. -->
+    <!-- This appears while the camera and MindAR are starting. -->
     <div id="loading-screen">
         <h1>Charlotte Historic Graveyard AR</h1>
         <p>Starting camera...</p>
     </div>
 
-    <!-- Normal webpage panel shown when the hotspot is clicked. -->
+    <!-- One reusable information panel for every hotspot. -->
     <div id="info-panel" class="hidden">
         <div class="info-card">
-            <button id="close-panel" aria-label="Close information panel">
+
+            <button
+                id="close-panel"
+                type="button"
+                aria-label="Close information panel"
+            >
                 ×
             </button>
 
-            <h2>Historic Graveyard</h2>
+            <p id="panel-label" class="panel-label">Historic Site</p>
 
-            <p>
-                This is temporary information for our first test hotspot.
-                Later, this panel will contain the real historical content.
+            <h2 id="panel-title">Information</h2>
+
+            <p id="panel-description">
+                Historical information will appear here.
             </p>
+
         </div>
     </div>
 
@@ -64,32 +71,32 @@
 
         <a-assets></a-assets>
 
-        <!--
-            The cursor and raycaster allow mouse clicks and touchscreen taps
-            to interact with objects marked with the class 'clickable'.
-        -->
-       <a-camera
-    position="0 0 0"
-    look-controls="enabled: false"
-></a-camera>
+        <!-- The AR camera. -->
+        <a-camera
+            position="0 0 0"
+            look-controls="enabled: false"
+        ></a-camera>
 
-<a-entity
-    cursor="rayOrigin: mouse; fuse: false"
-    raycaster="objects: .clickable; far: 10000"
-></a-entity>
+        <!-- This detects mouse clicks and touchscreen taps. -->
+        <a-entity
+            cursor="rayOrigin: mouse; fuse: false"
+            raycaster="objects: .clickable; far: 10000"
+        ></a-entity>
 
-        <!-- Everything inside this entity attaches to the tracked image. -->
+        <!-- Everything inside attaches to the tracked image. -->
         <a-entity
             id="image-target"
             mindar-image-target="targetIndex: 0"
         >
 
-            <!-- Our first clickable hotspot. -->
+            <!-- Hotspot 1 -->
             <a-circle
                 id="hotspot-one"
-                class="clickable"
-                radius="0.18"
-                position="0 0 0.03"
+                class="clickable hotspot"
+                data-title="History of the Site"
+                data-description="This temporary section introduces the history of the graveyard and explains why the site is important to Charlotte."
+                radius="0.14"
+                position="-0.35 0.25 0.03"
                 material="
                     color: #006241;
                     opacity: 0.95;
@@ -104,16 +111,79 @@
                     dur: 700;
                     easing: easeInOutSine;
                 "
-            ></a-circle>
+            >
+                <a-text
+                    value="1"
+                    color="#ffffff"
+                    align="center"
+                    position="0 0 0.01"
+                    width="0.8"
+                ></a-text>
+            </a-circle>
 
-            <!-- The letter shown inside the hotspot. -->
-            <a-text
-                value="i"
-                color="#ffffff"
-                align="center"
-                position="0 0 0.04"
-                width="0.7"
-            ></a-text>
+            <!-- Hotspot 2 -->
+            <a-circle
+                id="hotspot-two"
+                class="clickable hotspot"
+                data-title="People Remembered"
+                data-description="This section will share information about people connected to the graveyard and the surrounding community."
+                radius="0.14"
+                position="0.3 0.05 0.03"
+                material="
+                    color: #006241;
+                    opacity: 0.95;
+                    transparent: true;
+                "
+                animation="
+                    property: scale;
+                    from: 1 1 1;
+                    to: 1.15 1.15 1.15;
+                    direction: alternate;
+                    loop: true;
+                    dur: 850;
+                    easing: easeInOutSine;
+                "
+            >
+                <a-text
+                    value="2"
+                    color="#ffffff"
+                    align="center"
+                    position="0 0 0.01"
+                    width="0.8"
+                ></a-text>
+            </a-circle>
+
+            <!-- Hotspot 3 -->
+            <a-circle
+                id="hotspot-three"
+                class="clickable hotspot"
+                data-title="Preserving the Graveyard"
+                data-description="This section will explain preservation efforts and how visitors can learn more about the historic site."
+                radius="0.14"
+                position="-0.05 -0.3 0.03"
+                material="
+                    color: #006241;
+                    opacity: 0.95;
+                    transparent: true;
+                "
+                animation="
+                    property: scale;
+                    from: 1 1 1;
+                    to: 1.15 1.15 1.15;
+                    direction: alternate;
+                    loop: true;
+                    dur: 1000;
+                    easing: easeInOutSine;
+                "
+            >
+                <a-text
+                    value="3"
+                    color="#ffffff"
+                    align="center"
+                    position="0 0 0.01"
+                    width="0.8"
+                ></a-text>
+            </a-circle>
 
         </a-entity>
 
