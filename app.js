@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const scene = document.querySelector("a-scene");
     const imageTarget = document.querySelector("#image-target");
-
+const welcomeScreen = document.querySelector("#welcome-screen");
+const startButton = document.querySelector("#start-ar");
     const loadingScreen = document.querySelector("#loading-screen");
     const instructions = document.querySelector("#ar-instructions");
     const instructionText = document.querySelector("#instruction-text");
@@ -41,7 +42,35 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (error) {
         console.error("Unable to load hotspot information:", error);
     }
+/*
+ * Start MindAR after the visitor presses the button.
+ */
+if (startButton && welcomeScreen && loadingScreen) {
+    startButton.addEventListener("click", async () => {
+        startButton.disabled = true;
+        startButton.textContent = "Starting...";
 
+        welcomeScreen.classList.add("hidden");
+        loadingScreen.classList.remove("hidden");
+
+        try {
+            const arSystem = scene.systems["mindar-image-system"];
+
+            if (!arSystem) {
+                throw new Error("MindAR system could not be found.");
+            }
+
+            await arSystem.start();
+        } catch (error) {
+            console.error("Unable to start the AR experience:", error);
+
+            loadingScreen.innerHTML = `
+                <h1>Camera could not start</h1>
+                <p>Please allow camera access and refresh the page.</p>
+            `;
+        }
+    });
+}
     /*
      * Hide the loading screen when the camera is ready.
      */

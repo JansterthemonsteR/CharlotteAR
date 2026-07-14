@@ -22,9 +22,29 @@
 </head>
 
 <body>
+<!-- Welcome screen shown before the camera starts. -->
+<div id="welcome-screen">
+    <div class="welcome-card">
+        <p class="welcome-label">City of Charlotte</p>
 
+        <h1>Historic Graveyard AR</h1>
+
+        <p>
+            Use your camera to explore historical information placed
+            throughout the mural.
+        </p>
+
+        <button id="start-ar" type="button">
+            Start Experience
+        </button>
+
+        <p class="camera-note">
+            Camera access is required. No images are saved.
+        </p>
+    </div>
+</div>
     <!-- This appears while the camera and MindAR are starting. -->
-    <div id="loading-screen">
+    <div id="loading-screen" class="hidden">
         <h1>Charlotte Historic Graveyard AR</h1>
         <p>Starting camera...</p>
     </div>
@@ -74,10 +94,10 @@
 
     <!-- The augmented-reality scene. -->
     <a-scene
-        mindar-image="
-            imageTargetSrc: ./assets/targets/test-target.mind;
-            autoStart: true;
-        "
+       mindar-image="
+    imageTargetSrc: ./assets/targets/test-target.mind;
+    autoStart: false;
+"
         embedded
         color-space="sRGB"
         renderer="
