@@ -145,3 +145,36 @@ body {
 .panel-link:focus {
     background: #004d33;
 }
+/* Visitor instructions shown above the camera view. */
+
+#ar-instructions {
+    position: fixed;
+    top: 18px;
+    left: 50%;
+    z-index: 800;
+
+    width: calc(100% - 40px);
+    max-width: 430px;
+    padding: 12px 18px;
+    box-sizing: border-box;
+
+    transform: translateX(-50%);
+
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.75);
+    color: white;
+
+    text-align: center;
+    pointer-events: none;
+}
+
+#ar-instructions p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1.35;
+}
+
+#ar-instructions.target-found {
+    background: rgba(0, 98, 65, 0.9);
+}

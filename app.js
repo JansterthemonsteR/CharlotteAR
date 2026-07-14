@@ -1,6 +1,10 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const scene = document.querySelector("a-scene");
+    const imageTarget = document.querySelector("#image-target");
+
     const loadingScreen = document.querySelector("#loading-screen");
+    const instructions = document.querySelector("#ar-instructions");
+    const instructionText = document.querySelector("#instruction-text");
 
     const hotspots = document.querySelectorAll(".hotspot");
 
@@ -19,7 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     /*
-     * Load the historical content from the JSON file.
+     * Load all historical content from history.json.
      */
     try {
         const response = await fetch("./data/history.json");
@@ -39,7 +43,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     /*
-     * Hide the loading screen when MindAR is ready.
+     * Hide the loading screen when the camera is ready.
      */
     scene.addEventListener("arReady", () => {
         console.log("MindAR is ready.");
@@ -47,10 +51,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (loadingScreen) {
             loadingScreen.classList.add("hidden");
         }
+
+        if (instructions) {
+            instructions.classList.remove("hidden");
+        }
     });
 
     /*
-     * Show an error message if the camera cannot start.
+     * Show an error if MindAR cannot start.
      */
     scene.addEventListener("arError", () => {
         console.error("MindAR could not start.");
@@ -64,7 +72,38 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     /*
-     * Open the matching information panel when a hotspot is clicked.
+     * Update the instructions when the image is recognized.
+     */
+    if (imageTarget) {
+        imageTarget.addEventListener("targetFound", () => {
+            console.log("Tracking image found.");
+
+            if (instructionText) {
+                instructionText.textContent =
+                    "Mural found — tap a numbered hotspot";
+            }
+
+            if (instructions) {
+                instructions.classList.add("target-found");
+            }
+        });
+
+        imageTarget.addEventListener("targetLost", () => {
+            console.log("Tracking image lost.");
+
+            if (instructionText) {
+                instructionText.textContent =
+                    "Point your camera at the mural";
+            }
+
+            if (instructions) {
+                instructions.classList.remove("target-found");
+            }
+        });
+    }
+
+    /*
+     * Open the correct information card.
      */
     hotspots.forEach((hotspot) => {
         hotspot.addEventListener("click", () => {
@@ -90,7 +129,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             panelDescription.textContent = selectedHotspot.description;
 
             /*
-             * Display the image only when one is provided.
+             * Show or hide the photograph.
              */
             if (panelImage && selectedHotspot.image) {
                 panelImage.src = selectedHotspot.image;
@@ -105,7 +144,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             /*
-             * Display the Learn More button only when a link is provided.
+             * Show or hide the Learn More button.
              */
             if (panelLink && selectedHotspot.link) {
                 panelLink.href = selectedHotspot.link;
@@ -126,7 +165,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     /*
-     * Close the reusable information panel.
+     * Close the information panel.
      */
     function closeInfoPanel() {
         if (infoPanel) {
@@ -139,7 +178,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     /*
-     * Clicking the dark area outside the card also closes it.
+     * Clicking outside the white card also closes it.
      */
     if (infoPanel) {
         infoPanel.addEventListener("click", (event) => {
