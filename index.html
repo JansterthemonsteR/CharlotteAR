@@ -22,37 +22,43 @@
 </head>
 
 <body>
-<!-- Welcome screen shown before the camera starts. -->
-<div id="welcome-screen">
-    <div class="welcome-card">
-        <p class="welcome-label">City of Charlotte</p>
 
-        <h1>Historic Graveyard AR</h1>
+    <!-- Welcome screen shown before the camera starts. -->
+    <div id="welcome-screen">
+        <div class="welcome-card">
+            <p class="welcome-label">City of Charlotte</p>
 
-        <p>
-            Use your camera to explore historical information placed
-            throughout the mural.
-        </p>
+            <h1>Historic Graveyard AR</h1>
 
-        <button id="start-ar" type="button">
-            Start Experience
-        </button>
+            <p>
+                Use your camera to explore historical information placed
+                throughout the mural.
+            </p>
 
-        <p class="camera-note">
-            Camera access is required. No images are saved.
-        </p>
+            <button id="start-ar" type="button">
+                Start Experience
+            </button>
+
+            <p class="camera-note">
+                Camera access is required. No images are saved.
+            </p>
+        </div>
     </div>
-</div>
-    <!-- This appears while the camera and MindAR are starting. -->
+
+    <!-- Shown while MindAR and the camera are starting. -->
     <div id="loading-screen" class="hidden">
         <h1>Charlotte Historic Graveyard AR</h1>
         <p>Starting camera...</p>
     </div>
-<!-- Instructions shown while visitors use the AR experience. -->
-<div id="ar-instructions" class="hidden">
-    <p id="instruction-text">Point your camera at the mural</p>
-</div>
-    <!-- One reusable information panel for every hotspot. -->
+
+    <!-- Instructions shown during the AR experience. -->
+    <div id="ar-instructions" class="hidden">
+        <p id="instruction-text">
+            Point your camera at the mural
+        </p>
+    </div>
+
+    <!-- Reusable information panel for every hotspot. -->
     <div id="info-panel" class="hidden">
         <div class="info-card">
 
@@ -64,40 +70,44 @@
                 ×
             </button>
 
-            <p id="panel-label" class="panel-label">Historic Site</p>
+            <p id="panel-label" class="panel-label">
+                Historic Site
+            </p>
 
-<h2 id="panel-title">Information</h2>
+            <h2 id="panel-title">
+                Information
+            </h2>
 
-<img
-    id="panel-image"
-    class="panel-image hidden"
-    src=""
-    alt=""
-/>
+            <img
+                id="panel-image"
+                class="panel-image hidden"
+                src=""
+                alt=""
+            />
 
-<p id="panel-description">
-    Historical information will appear here.
-</p>
+            <p id="panel-description">
+                Historical information will appear here.
+            </p>
 
-<a
-    id="panel-link"
-    class="panel-link hidden"
-    href="#"
-    target="_blank"
-    rel="noopener noreferrer"
->
-    Learn More
-</a>
+            <a
+                id="panel-link"
+                class="panel-link hidden"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Learn More
+            </a>
 
         </div>
     </div>
 
-    <!-- The augmented-reality scene. -->
+    <!-- Augmented-reality scene. -->
     <a-scene
-       mindar-image="
-    imageTargetSrc: ./assets/targets/test-target.mind;
-    autoStart: false;
-"
+        mindar-image="
+            imageTargetSrc: ./assets/targets/test-target.mind;
+            autoStart: false;
+        "
         embedded
         color-space="sRGB"
         renderer="
@@ -111,21 +121,25 @@
 
         <a-assets></a-assets>
 
-        <!-- The AR camera. -->
+        <!-- Camera and click system. -->
         <a-camera
             position="0 0 0"
             look-controls="enabled: false"
+            cursor="
+                rayOrigin: mouse;
+                fuse: false;
+            "
+            raycaster="
+                objects: .clickable;
+                far: 10000;
+                interval: 0;
+            "
         ></a-camera>
 
-        <!-- This detects mouse clicks and touchscreen taps. -->
+        <!-- First temporary mural section. -->
         <a-entity
-            cursor="rayOrigin: mouse; fuse: false"
-            raycaster="objects: .clickable; far: 10000"
-        ></a-entity>
-
-        <!-- Everything inside attaches to the tracked image. -->
-        <a-entity
-            id="image-target"
+            id="image-target-one"
+            class="image-target"
             mindar-image-target="targetIndex: 0"
         >
 
@@ -145,7 +159,7 @@
                     property: scale;
                     from: 1 1 1;
                     to: 1.15 1.15 1.15;
-                    direction: alternate;
+                    dir: alternate;
                     loop: true;
                     dur: 700;
                     easing: easeInOutSine;
@@ -176,7 +190,7 @@
                     property: scale;
                     from: 1 1 1;
                     to: 1.15 1.15 1.15;
-                    direction: alternate;
+                    dir: alternate;
                     loop: true;
                     dur: 850;
                     easing: easeInOutSine;
@@ -207,7 +221,7 @@
                     property: scale;
                     from: 1 1 1;
                     to: 1.15 1.15 1.15;
-                    direction: alternate;
+                    dir: alternate;
                     loop: true;
                     dur: 1000;
                     easing: easeInOutSine;
@@ -215,6 +229,77 @@
             >
                 <a-text
                     value="3"
+                    color="#ffffff"
+                    align="center"
+                    position="0 0 0.01"
+                    width="0.8"
+                ></a-text>
+            </a-circle>
+
+        </a-entity>
+
+        <!-- Second temporary mural section. -->
+        <a-entity
+            id="image-target-two"
+            class="image-target"
+            mindar-image-target="targetIndex: 1"
+        >
+
+            <!-- Hotspot 4 -->
+            <a-circle
+                id="hotspot-four"
+                class="clickable hotspot"
+                data-hotspot-id="section-two-story"
+                radius="0.2"
+                position="-0.28 0.18 0.03"
+                material="
+                    color: #006241;
+                    opacity: 0.95;
+                    transparent: true;
+                "
+                animation="
+                    property: scale;
+                    from: 1 1 1;
+                    to: 1.15 1.15 1.15;
+                    dir: alternate;
+                    loop: true;
+                    dur: 750;
+                    easing: easeInOutSine;
+                "
+            >
+                <a-text
+                    value="4"
+                    color="#ffffff"
+                    align="center"
+                    position="0 0 0.01"
+                    width="0.8"
+                ></a-text>
+            </a-circle>
+
+            <!-- Hotspot 5 -->
+            <a-circle
+                id="hotspot-five"
+                class="clickable hotspot"
+                data-hotspot-id="section-two-details"
+                radius="0.2"
+                position="0.28 -0.18 0.03"
+                material="
+                    color: #006241;
+                    opacity: 0.95;
+                    transparent: true;
+                "
+                animation="
+                    property: scale;
+                    from: 1 1 1;
+                    to: 1.15 1.15 1.15;
+                    dir: alternate;
+                    loop: true;
+                    dur: 900;
+                    easing: easeInOutSine;
+                "
+            >
+                <a-text
+                    value="5"
                     color="#ffffff"
                     align="center"
                     position="0 0 0.01"

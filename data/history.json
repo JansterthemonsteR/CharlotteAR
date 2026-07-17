@@ -26,6 +26,24 @@
       "imageAlt": "Temporary image for the preservation section",
       "link": "https://www.charlottenc.gov/",
       "linkText": "Visit Charlotte's Website"
+    },
+    {
+      "id": "section-two-story",
+      "title": "Second Mural Section",
+      "description": "This temporary card proves that a different section of a long mural can display its own AR information.",
+      "image": "./assets/targets/test-section-two.jpeg",
+      "imageAlt": "Temporary artwork used as the second image target",
+      "link": "",
+      "linkText": ""
+    },
+    {
+      "id": "section-two-details",
+      "title": "Exploring Multiple Sections",
+      "description": "Visitors will be able to walk along the fence and discover different hotspots as their camera recognizes each mural section.",
+      "image": "./assets/targets/test-section-two.jpeg",
+      "imageAlt": "Temporary artwork used as the second image target",
+      "link": "https://www.charlottenc.gov/",
+      "linkText": "Learn More"
     }
   ]
 }

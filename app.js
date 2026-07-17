@@ -1,14 +1,16 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const scene = document.querySelector("a-scene");
-    const imageTarget = document.querySelector("#image-target");
-const welcomeScreen = document.querySelector("#welcome-screen");
-const startButton = document.querySelector("#start-ar");
+    const imageTargets = document.querySelectorAll(".image-target");
+
+    const welcomeScreen = document.querySelector("#welcome-screen");
+    const startButton = document.querySelector("#start-ar");
+
     const loadingScreen = document.querySelector("#loading-screen");
     const instructions = document.querySelector("#ar-instructions");
     const instructionText = document.querySelector("#instruction-text");
 
     const hotspots = document.querySelectorAll(".hotspot");
-
+console.log(`Found ${hotspots.length} hotspots.`);
     const infoPanel = document.querySelector("#info-panel");
     const panelTitle = document.querySelector("#panel-title");
     const panelDescription = document.querySelector("#panel-description");
@@ -24,7 +26,7 @@ const startButton = document.querySelector("#start-ar");
     }
 
     /*
-     * Load all historical content from history.json.
+     * Load the hotspot information from history.json.
      */
     try {
         const response = await fetch("./data/history.json");
@@ -42,35 +44,37 @@ const startButton = document.querySelector("#start-ar");
     } catch (error) {
         console.error("Unable to load hotspot information:", error);
     }
-/*
- * Start MindAR after the visitor presses the button.
- */
-if (startButton && welcomeScreen && loadingScreen) {
-    startButton.addEventListener("click", async () => {
-        startButton.disabled = true;
-        startButton.textContent = "Starting...";
 
-        welcomeScreen.classList.add("hidden");
-        loadingScreen.classList.remove("hidden");
+    /*
+     * Start MindAR after the visitor presses the button.
+     */
+    if (startButton && welcomeScreen && loadingScreen) {
+        startButton.addEventListener("click", async () => {
+            startButton.disabled = true;
+            startButton.textContent = "Starting...";
 
-        try {
-            const arSystem = scene.systems["mindar-image-system"];
+            welcomeScreen.classList.add("hidden");
+            loadingScreen.classList.remove("hidden");
 
-            if (!arSystem) {
-                throw new Error("MindAR system could not be found.");
+            try {
+                const arSystem = scene.systems["mindar-image-system"];
+
+                if (!arSystem) {
+                    throw new Error("MindAR system could not be found.");
+                }
+
+                await arSystem.start();
+            } catch (error) {
+                console.error("Unable to start the AR experience:", error);
+
+                loadingScreen.innerHTML = `
+                    <h1>Camera could not start</h1>
+                    <p>Please allow camera access and refresh the page.</p>
+                `;
             }
+        });
+    }
 
-            await arSystem.start();
-        } catch (error) {
-            console.error("Unable to start the AR experience:", error);
-
-            loadingScreen.innerHTML = `
-                <h1>Camera could not start</h1>
-                <p>Please allow camera access and refresh the page.</p>
-            `;
-        }
-    });
-}
     /*
      * Hide the loading screen when the camera is ready.
      */
@@ -101,15 +105,19 @@ if (startButton && welcomeScreen && loadingScreen) {
     });
 
     /*
-     * Update the instructions when the image is recognized.
+     * Keep track of every mural section currently recognized.
      */
-    if (imageTarget) {
+    const activeTargets = new Set();
+
+    imageTargets.forEach((imageTarget) => {
         imageTarget.addEventListener("targetFound", () => {
-            console.log("Tracking image found.");
+            activeTargets.add(imageTarget.id);
+
+            console.log(`Tracking image found: ${imageTarget.id}`);
 
             if (instructionText) {
                 instructionText.textContent =
-                    "Mural found — tap a numbered hotspot";
+                    "Mural section found — tap a numbered hotspot";
             }
 
             if (instructions) {
@@ -118,29 +126,37 @@ if (startButton && welcomeScreen && loadingScreen) {
         });
 
         imageTarget.addEventListener("targetLost", () => {
-            console.log("Tracking image lost.");
+            activeTargets.delete(imageTarget.id);
 
-            if (instructionText) {
-                instructionText.textContent =
-                    "Point your camera at the mural";
-            }
+            console.log(`Tracking image lost: ${imageTarget.id}`);
 
-            if (instructions) {
-                instructions.classList.remove("target-found");
+            if (activeTargets.size === 0) {
+                if (instructionText) {
+                    instructionText.textContent =
+                        "Point your camera at the mural";
+                }
+
+                if (instructions) {
+                    instructions.classList.remove("target-found");
+                }
             }
         });
-    }
+    });
 
     /*
-     * Open the correct information card.
+     * Open the matching information panel.
      */
-    hotspots.forEach((hotspot) => {
-        hotspot.addEventListener("click", () => {
-            const hotspotId = hotspot.dataset.hotspotId;
+  hotspots.forEach((hotspot) => {
+    hotspot.addEventListener("click", () => {
+        console.log(`Clicked element: ${hotspot.id}`);
 
-            const selectedHotspot = hotspotData.find(
-                (item) => item.id === hotspotId
-            );
+        const hotspotId = hotspot.dataset.hotspotId;
+
+        console.log(`Data hotspot ID: ${hotspotId}`);
+
+        const selectedHotspot = hotspotData.find(
+            (item) => item.id === hotspotId
+        );
 
             if (
                 !selectedHotspot ||
@@ -173,7 +189,7 @@ if (startButton && welcomeScreen && loadingScreen) {
             }
 
             /*
-             * Show or hide the Learn More button.
+             * Show or hide the link button.
              */
             if (panelLink && selectedHotspot.link) {
                 panelLink.href = selectedHotspot.link;
